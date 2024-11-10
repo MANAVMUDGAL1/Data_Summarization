@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Summarizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #6A11CB, #2575FC);
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px; 
+            width: 100%;
+            padding: 25px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        h2, h3 {
+            text-align: center;
+            color: #4a4a4a;
+            margin-top: 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        textarea {
+            resize: vertical;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #6A11CB, #2575FC);
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button[type="submit"] {
+            background-color: #2575FC;
+        }
+        button[type="submit"]:hover {
+            background-color: #1A5BBF;
+            transform: translateY(-2px);
+        }
+
+        #stop-btn {
+            background-color: #dc3545;
+            border-radius: 6px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #fff;
+            margin-top: 10px;
+            width: 100%;
+            text-align: center;
+        }
+        #stop-btn:hover {
+            background-color: #c82333;
+        }
+
+        
+        textarea[name="result"] {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+            color: #6c757d;
+            width: 100%; /* Set width to 100% */
+        }
+
+        #speak-btn {
+            background-color: #28a745;
+            border-radius: 6px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #fff;
+            margin-top: 10px;
+            width: 100%;
+            text-align: center;
+        }
+        #speak-btn:hover {
+            background-color: #218838;
+        }
+        
+
+    button[type="reset"] {
+        background-color: #dc3545; 
+        color: #fff;
+    }
+
+    button[type="reset"]:hover {
+        background-color: #c82333; 
+        transform: translateY(-2px);
+    }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Summarize Your Data</h2>
+        <form action="{{ url_for('Summarize') }}" method="post">
+            <label for="data">Enter your data</label>
+            <textarea id="data" name="data" rows="8" placeholder="Enter your data" required></textarea>
+            
+            <label for="maxL">Select Summary Length</label>
+            <input type="range" id="maxL" min="20" max="400" name="maxL" value="50">
+            
+            <div class="buttons">
+                <button type="reset">Clear</button>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+
+        <h3>Summarized Data</h3>
+        <textarea name="result" rows="8" readonly>{{ result }}</textarea>
+        
+        <div id="speak-btn" onclick="readText()">Read Aloud</div>
+        <div id="stop-btn" onclick="stopSpeech()">Stop</div>
+    </div>
+
+    <script>
+        let utterance;  
+
+        function readText() {
+            var resultText = document.querySelector('textarea[name="result"]').value;
+            if (resultText) {
+                utterance = new SpeechSynthesisUtterance(resultText);
+                speechSynthesis.speak(utterance);
+            } else {
+                alert("No summarized text to read.");
+            }
+        }
+
+        function stopSpeech() {
+            if (speechSynthesis.speaking) {
+                speechSynthesis.cancel(); 
+            }
+        }
+    </script>
+</body>
+</html>
