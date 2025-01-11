@@ -1,0 +1,1 @@
+A Text-Summarization-NLP project that uses advanced natural language processing techniques to generate concise, meaningful summaries from lengthy texts, enhancing readability, understanding, and efficient information retrieval.
